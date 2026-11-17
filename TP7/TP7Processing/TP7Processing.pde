@@ -5,8 +5,10 @@ String comando = "";
 void setup(){
 size(600,600);
 printArray(Serial.list());
+if(Serial.list().length>0){
 String nPuerto = Serial.list()[0];
 puerto = new Serial(this, nPuerto, 115200);
+}
 }
 
 boolean boton1 = false;
@@ -33,7 +35,7 @@ dibujarBoton(width*0.66, height*0.35, width*0.15, "Boton 2", boton2);
 dibujarBoton(width*0.33, height*0.75, width*0.15, "LED1", led1);
 dibujarBoton(width*0.66, height*0.75, width*0.15, "LED2", led2);
 
-
+if(puerto!=null){
 if(puerto.available()>0){
  comando = puerto.readStringUntil('\n');
  if(comando != null){  
@@ -67,7 +69,7 @@ if(puerto.available()>0){
    }
   }
 }
-
+}
 
 void dibujarPanel(float x, float y, float ancho, float alto, String informacion){
   stroke(255,255,255);
@@ -103,20 +105,23 @@ void mousePressed(){
   if(dist(width*0.33, height*0.35, mouseX, mouseY)<width*0.075){
     led1 = !led1;
     boton1=true;
-    if (led1) {
-      puerto.write("1"); 
-    } else {
-      puerto.write("0"); 
+    if(puerto != null){
+      if (led1) {
+        puerto.write("1"); 
+      } else {
+        puerto.write("0"); 
+      }
     }
   }
     if(dist(width*0.66, height*0.35, mouseX, mouseY)<width*0.075){
     led2 = !led2;
     boton2=true;
-    if (led2) {
-      puerto.write("3"); 
-    } else {
-      puerto.write("2"); 
+    if(puerto != null){
+      if (led2) {
+        puerto.write("3"); 
+      } else {
+        puerto.write("2"); 
+      }
     }
-  }
-  
+   }
 }
