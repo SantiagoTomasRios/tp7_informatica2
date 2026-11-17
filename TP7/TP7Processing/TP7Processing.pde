@@ -1,6 +1,6 @@
 import processing.serial.*;
 Serial puerto;
-String comando;
+String comando = "";
 
 void setup(){
 size(600,600);
@@ -13,6 +13,7 @@ boolean boton1 = false;
 boolean boton2 = false;
 boolean led1 = false;
 boolean led2= false;
+boolean activarInterfaz = true;
 
 void draw(){
 background(0,0,0);
@@ -21,6 +22,10 @@ rectMode(CENTER);
 textSize(28);
 dibujarPanel(width*0.5, height*0.5, width*0.9, height*0.9, "TP7 Informatica 2 entorno gráfico");
 textSize(13);
+if(!mousePressed && activarInterfaz){
+ boton1=false;
+ boton2=false;
+}
 dibujarPanel(width*0.5, height*0.35, width*0.75, height*0.33, "Entradas");
 dibujarPanel(width*0.5, height*0.75, width*0.75, height*0.33, "Salidas");
 dibujarBoton(width*0.33, height*0.35, width*0.15, "Boton 1", boton1);
@@ -35,9 +40,29 @@ if(puerto.available()>0){
   print(comando);
   comando = trim(comando);
   if(comando.equals("Boton 1 pulsado")){
-     boton1  = !boton1;
+      activarInterfaz=false;
+      boton1  = true; 
+      led1=!led1;
+      if (led1) {
+      puerto.write("1"); 
+      } else {
+        puerto.write("0"); 
+      }
+    }else if(comando.equals("Boton 1 no pulsado")){
+      activarInterfaz=true;
+       boton1  = false;
      }else if(comando.equals("Boton 2 pulsado")){
-      boton2 = !boton2; 
+       activarInterfaz=false;
+        boton2 = true;
+        led2=!led2;
+        if (led2) {
+        puerto.write("3"); 
+      } else {
+        puerto.write("2"); 
+      }
+     }else if(comando.equals("Boton 2 no pulsado")){
+       activarInterfaz=true;
+       boton2 = false;
      }
    }
   }
@@ -75,20 +100,22 @@ void dibujarBoton(float x, float y, float diametro, String informacion, boolean 
 }
 
 void mousePressed(){
-  if(dist(width*0.33, height*0.75, mouseX, mouseY)<width*0.075){
+  if(dist(width*0.33, height*0.35, mouseX, mouseY)<width*0.075){
     led1 = !led1;
-    if(led1){
-     puerto.write("1"); 
-    }else{
-     puerto.write("0"); 
+    boton1=true;
+    if (led1) {
+      puerto.write("1"); 
+    } else {
+      puerto.write("0"); 
     }
   }
-    if(dist(width*0.66, height*0.75, mouseX, mouseY)<width*0.075){
+    if(dist(width*0.66, height*0.35, mouseX, mouseY)<width*0.075){
     led2 = !led2;
-    if(led2){
-     puerto.write("3"); 
-    }else{
-     puerto.write("2"); 
+    boton2=true;
+    if (led2) {
+      puerto.write("3"); 
+    } else {
+      puerto.write("2"); 
     }
   }
   
