@@ -19,18 +19,28 @@ void setup() {
 
 void loop() {
   int estadoActual1 = digitalRead(boton1Pin);
-  if (estadoAnterior1 == HIGH && estadoActual1 == LOW) {
-    Serial.println("Boton 1 pulsado");
-    delay(50); 
+  if (estadoAnterior1 != estadoActual1){
+    if(estadoActual1 == LOW){
+      Serial.println("Boton 1 pulsado");
+    } else{
+      Serial.println("Boton 1 no pulsado");
+      Serial.println("LED 1 apagado");
+    }
+    delay(50);
+    estadoAnterior1 = estadoActual1; 
   }
-  estadoAnterior1 = estadoActual1;
+   int estadoActual2 = digitalRead(boton2Pin);
+ if (estadoAnterior2 != estadoActual2){
+    if(estadoActual2 == LOW){
+      Serial.println("Boton 2 pulsado");
+    } else{
+     Serial.println("Boton 2 no pulsado");
+     Serial.println("LED 2 apagado");
+    }
+    delay(50);
+    estadoAnterior2 = estadoActual2; 
+  }
  
-  int estadoActual2 = digitalRead(boton2Pin);
-  if (estadoAnterior2 == HIGH && estadoActual2 == LOW) {
-    Serial.println("Boton 2 pulsado");
-    delay(50); 
-  }
-  estadoAnterior2 = estadoActual2;
 
   if(Serial.available()>0){
     char comando = Serial.read();
